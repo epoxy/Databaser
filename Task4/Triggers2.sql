@@ -34,7 +34,7 @@ BEGIN
 	SELECT COUNT (*)
 	INTO alreadyRegistred
 	FROM Registrations R
-	WHERE R.Courses = :new.Courses --vfr?
+	WHERE R.Courses = :new.Courses
 	AND R.Status = 'registered'
 	AND R.Student = :new.student;
 	
@@ -52,23 +52,23 @@ BEGIN
 
 	
 	IF requiredCourse = passedRequiredCourse THEN
-		IF readCurrentCourse < 1 THEN
-			IF alreadyRegistred < 1 THEN
+		IF readCurrentCourse = 0 THEN
+			IF alreadyRegistred = 0 THEN
 				IF IsaLimitedCourse != 0 THEN
 					SELECT L.availablePlaces
 					INTO NbrOfPlacesInCourse
 					FROM LimitedParticipantsCourse L
 					WHERE L.course = :new.Courses;	
-					IF nbrOfRegistredInCourse => NbrOfPlacesInCourse
+					IF nbrOfRegistredInCourse >= NbrOfPlacesInCourse THEN
 						INSERT INTO WaitingFor
 						VALUES (:new.student, :new.Courses, current_TIMESTAMP);	
 					ELSE
 						INSERT INTO Registred
 						VALUES (:new.Student, :new.Courses);
 				 	END IF;
-					ELSE
-					INSERT INTO Registred
-					VALUES (:new.Student, :new.Courses);
+				ELSE
+				INSERT INTO Registred
+				VALUES (:new.Student, :new.Courses);
 				END IF;
 			END IF;
 		END IF;
