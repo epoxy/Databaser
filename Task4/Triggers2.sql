@@ -7,8 +7,10 @@ DECLARE
 	passedRequiredCourse INT;
 	ReadCurrentCourse  INT;
 	alreadyRegistred INT;
-	NbrOfPlacesInCourse INT;
+	IsaLimitedCourse INT;
 	nbrOfRegistredInCourse INT;
+	NbrOfPlacesInCourse INT;
+	
 	
 BEGIN
 	SELECT COUNT(*)
@@ -37,7 +39,7 @@ BEGIN
 	AND R.Student = :new.student;
 	
 	SELECT Count(*)
-	INTO NbrOfPlacesInCourse
+	INTO IsaLimitedCourse
 	FROM LimitedParticipantsCourse L
 	WHERE L.course = :new.Courses;
 	
@@ -47,17 +49,26 @@ BEGIN
 	WHERE R.Courses = :new.Courses
 	AND R.Status = 'registered';
 	
-	IF NbrOfPlacesInCourse
+
 	
 	IF requiredCourse = passedRequiredCourse THEN
 		IF readCurrentCourse < 1 THEN
 			IF alreadyRegistred < 1 THEN
-				IF NbrOfPlacesInCourse > nbrOfRegistredInCourse THEN
+				IF IsaLimitedCourse != 0 THEN
+					SELECT L.availablePlaces
+					INTO NbrOfPlacesInCourse
+					FROM LimitedParticipantsCourse L
+					WHERE L.course = :new.Courses;	
+					IF nbrOfRegistredInCourse => NbrOfPlacesInCourse
+						INSERT INTO WaitingFor
+						VALUES (:new.student, :new.Courses, current_TIMESTAMP);	
+					ELSE
+						INSERT INTO Registred
+						VALUES (:new.Student, :new.Courses);
+				 	END IF;
+					ELSE
 					INSERT INTO Registred
 					VALUES (:new.Student, :new.Courses);
-				ELSE 
-					INSERT INTO WaitingFor
-					VALUES (:new.student, :new.Courses, current_TIMESTAMP);
 				END IF;
 			END IF;
 		END IF;
