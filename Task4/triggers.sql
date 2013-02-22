@@ -1,14 +1,3 @@
-  CREATE TRIGGER TryToRegister
-  	AFTER INSERT ON 
-
-
-CREATE ASSERTION AlreadyPassed
-CHECK(NOT EXISTS
-	(SELECT Registred.student student1, WaitingFor.student student2
-	FROM Registred, WaitingFor
-	WHERE student1=student1)
-);
-
 CREATE OR REPLACE TRIGGER UnRegStudent
 INSTEAD OF DELETE ON Registrations
 REFERENCING OLD AS old
@@ -23,20 +12,26 @@ DECLARE
 	nbrOfStudentsInQueue INT;
 
 BEGIN
-SELECT COUNT (*)
+
+	SELECT COUNT (*)
 	INTO alreadyRegistred
 	FROM Registrations R
 	WHERE R.Courses = :old.Courses
 	AND R.Status = 'registered'
 	AND R.Student = :old.student;
 
-SELECT COUNT (*)
+	SELECT COUNT (*)
 	INTO alreadyWaiting
 	FROM Registrations R
 	WHERE R.Courses = :old.Courses
 	AND R.Status = 'waiting'
 	AND R.Student = :old.student;
 	
+	IF alreadyRegistred=0 AND alreadyWaiting=0 
+	THEN
+      raise_application_error (-20999,'Student not registered or waiting');
+	END IF;
+
 	SELECT Count(*)
 	INTO IsaLimitedCourse
 	FROM LimitedParticipantsCourse L
@@ -47,6 +42,11 @@ SELECT COUNT (*)
 	FROM Registrations R
 	WHERE R.Courses = :old.Courses
 	AND R.Status = 'registered';
+
+	SELECT COUNT(*)
+	INTO nbrOfStudentsInQueue
+	FROM CourseQueuePositions Q
+	WHERE Q.Course = old.Courses;
 	
 	SELECT COUNT(*)
 	INTO nbrOfStudentsInQueue
