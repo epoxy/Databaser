@@ -30,11 +30,6 @@ BEGIN
 	FROM PassedCourses P
 	WHERE P.passedCourse = :new.Courses
 	AND P.StudentID = :new.student;
-
-	IF passedCurrentCourse=1 
-	THEN
-      raise_application_error (-20000,'Student has already passed the course');
-	END IF;
 	
 	SELECT COUNT (*)
 	INTO alreadyRegistred
@@ -43,11 +38,6 @@ BEGIN
 	AND R.Status = 'registered'
 	AND R.Student = :new.student;
 	
-	IF alreadyRegistred=1 
-	THEN
-      raise_application_error (-20001,'Student is already registered to the course');
-	END IF;
-
 	SELECT Count(*)
 	INTO IsaLimitedCourse
 	FROM LimitedParticipantsCourse L
@@ -80,10 +70,14 @@ BEGIN
 				INSERT INTO Registred
 				VALUES (:new.Student, :new.Courses);
 				END IF;
+			ELSE
+				raise_application_error (-20001,'Student is already registered to or waiting for the course');	
 			END IF;
-		END IF;
 		ELSE
-	      raise_application_error (-20001,'Student hasn´t passed the required courses');
+			raise_application_error (-20002,'Student has already passed the course');
+		END IF;
+	ELSE
+		raise_application_error (-20003,'Student hasn´t passed the required courses');
 	END IF;
 END;
 

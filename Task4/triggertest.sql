@@ -4,8 +4,9 @@ INSERT INTO Registrations(Student, courses) VALUES (999, 'TDA416'); -- 999 shoul
 INSERT INTO Registrations(Student, courses) VALUES (666, 'TDA416'); -- 666 should be registred as waiting at course tda416
 INSERT INTO Registrations(Student, courses) VALUES (777, 'TDA416'); -- 777 should be in registred as waiting at course tda416
 INSERT INTO Registrations(Student, courses) VALUES (777, 'MVE111'); -- 777 should be registred at mve111
-INSERT INTO Registrations(Student, courses) VALUES (777, 'MVE111'); -- Exception: "Student is already registered to the course"
+INSERT INTO Registrations(Student, courses) VALUES (777, 'MVE111'); -- Exception: "Exception: "Student is already registered to or waiting for the course"
 INSERT INTO Registrations(Student, courses) VALUES (111, 'DAT111'); -- Exception: "Student has already passed the course"
+INSERT INTO Registrations(Student, courses) VALUES (111, 'DAT111'); -- Exception: "Student hasn´t passed the required courses"
 
 
 DELETE --222 should be unregisterd from course and 666 should be registred
