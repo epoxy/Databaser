@@ -97,6 +97,7 @@ DECLARE
 	alreadyWaiting INT;
 	IsaLimitedCourse INT;
 	nbrOfRegistredInCourse INT;
+	nbrOfStudentsInQueue INT;
 
 BEGIN
 SELECT COUNT (*)
@@ -124,13 +125,18 @@ SELECT COUNT (*)
 	WHERE R.Courses = :old.Courses
 	AND R.Status = 'registered';
 	
+	SELECT COUNT(*)
+	INTO nbrOfStudentsInQueue
+	FROM CourseQueuePositions Q
+	WHERE Q.Course = old.Courses;
+
 	IF alreadyWaiting != 0 THEN	
 	DELETE
 	FROM Registrations R
 	WHERE R.Courses = :old.courses
 	AND R.student = :old.student;
 	END IF;
-	
+
 	IF alreadyRegistred != 0 THEN
 	DELETE
 	FROM Registrations R
