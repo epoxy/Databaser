@@ -163,8 +163,3 @@ SELECT COUNT (*)
 		END IF;
 	END IF;	
 END;
-
-DELETE 
-FROM Registrations r
-WHERE r.student = '222'
-AND r.courses = 'TDA416'

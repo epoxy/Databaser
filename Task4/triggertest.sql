@@ -23,3 +23,8 @@ DELETE -- 111 should not be waiting for tda999 any more
 FROM Registrations r
 WHERE r.student = 111
 AND r.courses = 'TDA999'
+
+DELETE -- 123 should be unregistered from course TDA999 and 333 should be registred
+FROM REGISTRATIONS
+WHERE r.student = 123
+AND r.courses = 'TDA999'
