@@ -82,6 +82,8 @@ BEGIN
 				END IF;
 			END IF;
 		END IF;
+		ELSE
+	      raise_application_error (-20001,'Student hasn´t passed the required courses');
 	END IF;
 END;
 
