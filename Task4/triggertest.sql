@@ -1,11 +1,10 @@
-INSERT INTO Registrations(Student, courses) VALUES (123, 'ELA222'); -- Ska funka eftersom 123 läst ELA111 detta testar RequiredCourse
-INSERT INTO Registrations(Student, courses) VALUES (123, 'ELA111'); -- ska ej läggas in eftersom 123 redan läst kursen
-INSERT INTO Registrations(Student, courses) VALUES (111, 'MVE111'); -- ska ej funka redan registrerad
-INSERT INTO Registrations(Student, courses) VALUES (999, 'TDA416'); -- ska bli registrerad
-INSERT INTO Registrations(Student, courses) VALUES (666, 'TDA416'); -- hamna i väntelista
-INSERT INTO Registrations(Student, courses) VALUES (777, 'TDA416'); -- hamna i väntelitsa
-INSERT INTO Registrations(Student, courses) VALUES (777, 'MVE111'); -- bli registrerad
-INSERT INTO Registrations(Student, courses) VALUES (777, 'MVE111'); -- Exception: "Student is already registered to or waiting for the course"
+INSERT INTO Registrations(Student, courses) VALUES (123, 'ELA222'); -- should work since  123 already passed course ELA111 so he should be registred at course ELA222
+INSERT INTO Registrations(Student, courses) VALUES (123, 'ELA111'); -- Exception: "Student has already passed the course"
+INSERT INTO Registrations(Student, courses) VALUES (999, 'TDA416'); -- 999 should be registred at course tda416
+INSERT INTO Registrations(Student, courses) VALUES (666, 'TDA416'); -- 666 should be registred as waiting at course tda416
+INSERT INTO Registrations(Student, courses) VALUES (777, 'TDA416'); -- 777 should be in registred as waiting at course tda416
+INSERT INTO Registrations(Student, courses) VALUES (777, 'MVE111'); -- 777 should be registred at mve111
+INSERT INTO Registrations(Student, courses) VALUES (777, 'MVE111'); -- Exception: "Exception: "Student is already registered to or waiting for the course"
 INSERT INTO Registrations(Student, courses) VALUES (111, 'DAT111'); -- Exception: "Student has already passed the course"
 INSERT INTO Registrations(Student, courses) VALUES (111, 'DAT111'); -- Exception: "Student hasn´t passed the required courses"
 
