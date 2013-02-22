@@ -5,4 +5,5 @@ INSERT INTO Registrations(Student, courses) VALUES (999, 'TDA416'); -- ska bli r
 INSERT INTO Registrations(Student, courses) VALUES (666, 'TDA416'); -- hamna i väntelista
 INSERT INTO Registrations(Student, courses) VALUES (777, 'TDA416'); -- hamna i väntelitsa
 INSERT INTO Registrations(Student, courses) VALUES (777, 'MVE111'); -- bli registrerad
-INSERT INTO Registrations(Student, courses) VALUES (777, 'MVE111'); -- Exception: "Student has already passed the course"
+INSERT INTO Registrations(Student, courses) VALUES (777, 'MVE111'); -- Exception: "Student is already registered to the course"
+INSERT INTO Registrations(Student, courses) VALUES (111, 'DAT111'); -- Exception: "Student has already passed the course"

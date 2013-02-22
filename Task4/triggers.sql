@@ -31,9 +31,9 @@ BEGIN
 	WHERE P.passedCourse = :new.Courses
 	AND P.StudentID = :new.student;
 
-	IF passedCurrentCourse=0 
+	IF passedCurrentCourse=1 
 	THEN
-      raise_application_error (-20999,'Student has already passed the course');
+      raise_application_error (-20000,'Student has already passed the course');
 	END IF;
 	
 	SELECT COUNT (*)
@@ -43,6 +43,11 @@ BEGIN
 	AND R.Status = 'registered'
 	AND R.Student = :new.student;
 	
+	IF alreadyRegistred=1 
+	THEN
+      raise_application_error (-20001,'Student is already registered to the course');
+	END IF;
+
 	SELECT Count(*)
 	INTO IsaLimitedCourse
 	FROM LimitedParticipantsCourse L
