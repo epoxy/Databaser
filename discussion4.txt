@@ -1,0 +1,18 @@
+Motivations for any non-standad choices in your triggers.
+
+In both triggers, if the course has limited available places we check this with 
+help of two queries.  First we check if the course has limited places and store
+this information as an INT (number 1) in the variable IsLimitedCourse. Then we do an if 
+statement to see if isLimitedCourse has value 1 and count the available places. When we do
+this we cant get any exception messages from Oracle that says "NO DATA FOUND".
+
+In the trigger RegAtStudent we throw three exceptions if the student already is registered 
+or waiting fo the course, if the student has already passed the corse and if the student 
+has not passed the course's required courses.
+
+Exceptions are not necessary in the trigger UnRegStudent. When a deletion is trying to be 
+made the student and course will be looked up and if they do not exist nothing will happen 
+and the trigger will never be trigged anyway which will never cause an exception.
+
+Group 23
+By Tomas Selldén and Anton Palmqvist
