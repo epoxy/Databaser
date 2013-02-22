@@ -88,6 +88,70 @@ INSERT INTO Registrations(Student, courses) VALUES (777, 'MVE111'); -- bli regis
 INSERT INTO Registrations(Student, courses) VALUES (123, 'TDA999');
 INSERT INTO Registrations(Student, courses) VALUES (123, 'ELA111');
 
+CREATE OR REPLACE TRIGGER UnRegStudent
+INSTEAD OF DELETE ON Registrations
+REFERENCING NEW AS new
+FOR EACH ROW
+DECLARE
+	alreadyRegistred INT;
+	alreadyWaiting INT;
+	IsaLimitedCourse INT;
+	nbrOfRegistredInCourse;
+
+BEGIN
+SELECT COUNT (*)
+	INTO alreadyRegistred
+	FROM Registrations R
+	WHERE R.Courses = :new.Courses
+	AND R.Status = 'registered'
+	AND R.Student = :new.student;
+
+SELECT COUNT (*)
+	INTO alreadyWaiting
+	FROM Registrations R
+	WHERE R.Courses = :new.Courses
+	AND R.Status = 'waiting'
+	AND R.Student = :new.student;
+	
+	SELECT Count(*)
+	INTO IsaLimitedCourse
+	FROM LimitedParticipantsCourse L
+	WHERE L.course = :new.Courses;
+	
+	SELECT COUNT (*)
+	INTO nbrOfRegistredInCourse
+	FROM Registrations R
+	WHERE R.Courses = :new.Courses
+	AND R.Status = 'registered';
+	
+	IF alreadyWaiting != 0 THEN	
+	DELETE
+	FROM Registrations R
+	WHERE R.Courses = :new.courses
+	AND R.student = :new.student;
+	END IF;
+	
+	IF alreadyRegistred != 0 THEN
+	DELETE
+	FROM Registrations R
+	WHERE R.Course = :new.Courses
+	AND R.student = :new.student;
+	END IF
+		IF IsaLimitedCourse != 0 THEN
+		SELECT L.availablePlaces
+			INTO NbrOfPlacesInCourse
+			FROM LimitedParticipantsCourse L
+			WHERE L.course = :new.Courses;	
+			IF nbrOfRegistredInCourse < NbrOfPlacesInCourse THEN
+				
+			END IF;
+		END IF;	
+	END IF;
+END;
+
+
+
+
 
 
 /*
