@@ -90,58 +90,58 @@ INSERT INTO Registrations(Student, courses) VALUES (123, 'ELA111');
 
 CREATE OR REPLACE TRIGGER UnRegStudent
 INSTEAD OF DELETE ON Registrations
-REFERENCING NEW AS new
+REFERENCING OLD AS new
 FOR EACH ROW
 DECLARE
 	alreadyRegistred INT;
 	alreadyWaiting INT;
 	IsaLimitedCourse INT;
-	nbrOfRegistredInCourse;
+	nbrOfRegistredInCourse INT;
 
 BEGIN
 SELECT COUNT (*)
 	INTO alreadyRegistred
 	FROM Registrations R
-	WHERE R.Courses = :new.Courses
+	WHERE R.Courses = :old.Courses
 	AND R.Status = 'registered'
-	AND R.Student = :new.student;
+	AND R.Student = :old.student;
 
 SELECT COUNT (*)
 	INTO alreadyWaiting
 	FROM Registrations R
-	WHERE R.Courses = :new.Courses
+	WHERE R.Courses = :old.Courses
 	AND R.Status = 'waiting'
-	AND R.Student = :new.student;
+	AND R.Student = :old.student;
 	
 	SELECT Count(*)
 	INTO IsaLimitedCourse
 	FROM LimitedParticipantsCourse L
-	WHERE L.course = :new.Courses;
+	WHERE L.course = :old.Courses;
 	
 	SELECT COUNT (*)
 	INTO nbrOfRegistredInCourse
 	FROM Registrations R
-	WHERE R.Courses = :new.Courses
+	WHERE R.Courses = :old.Courses
 	AND R.Status = 'registered';
 	
 	IF alreadyWaiting != 0 THEN	
 	DELETE
 	FROM Registrations R
-	WHERE R.Courses = :new.courses
-	AND R.student = :new.student;
+	WHERE R.Courses = :old.courses
+	AND R.student = :old.student;
 	END IF;
 	
 	IF alreadyRegistred != 0 THEN
 	DELETE
 	FROM Registrations R
-	WHERE R.Course = :new.Courses
-	AND R.student = :new.student;
+	WHERE R.Course = :old.Courses
+	AND R.student = :old.student;
 	END IF
 		IF IsaLimitedCourse != 0 THEN
 		SELECT L.availablePlaces
 			INTO NbrOfPlacesInCourse
 			FROM LimitedParticipantsCourse L
-			WHERE L.course = :new.Courses;	
+			WHERE L.course = :old.Courses;	
 			IF nbrOfRegistredInCourse < NbrOfPlacesInCourse THEN
 				
 			END IF;
