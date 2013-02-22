@@ -132,15 +132,15 @@ SELECT COUNT (*)
 	
 	IF alreadyWaiting != 0 THEN	--sista satsen vi gör!
 		DELETE
-		FROM Registrations R
-		WHERE R.Courses = :old.courses
-		AND R.student = :old.student;
+		FROM WaitingFor W
+		WHERE W.Course = :old.courses
+		AND W.student = :old.student;
 	END IF;
 	
 	IF alreadyRegistred != 0 THEN -- kasta exception?
 		DELETE
-		FROM Registrations R
-		WHERE R.Courses = :old.Courses
+		FROM Registred R
+		WHERE R.Course = :old.Courses
 		AND R.student = :old.student;	
 		IF nbrOfStudentWaiting != 0 AND IsaLimitedCourse != 0 THEN 
 			SELECT L.availablePlaces
@@ -163,3 +163,8 @@ SELECT COUNT (*)
 		END IF;
 	END IF;	
 END;
+
+DELETE 
+FROM Registrations r
+WHERE r.student = '222'
+AND r.courses = 'TDA416'
