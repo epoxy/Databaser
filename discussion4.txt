@@ -1,3 +1,9 @@
+Group 23
+Anton Palmqvist
+Tomas Sellden
+
+
+
 Motivations for any non-standad choices in your triggers.
 
 In both triggers, if the course has limited available places we check this with 

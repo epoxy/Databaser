@@ -1,3 +1,10 @@
+Group 23
+Anton Palmqvist
+Tomas Sellden
+
+
+
+
 CREATE OR REPLACE TRIGGER RegAtStudent
 INSTEAD OF INSERT ON Registrations
 REFERENCING NEW AS new

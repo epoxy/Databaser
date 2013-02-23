@@ -1,3 +1,9 @@
+Group 23
+Anton Palmqvist
+Tomas Sellden
+
+
+
 INSERT INTO Registrations(Student, courses) VALUES (123, 'ELA222'); -- should work since  123 already passed course ELA111 so he should be registred at course ELA222
 INSERT INTO Registrations(Student, courses) VALUES (123, 'ELA111'); -- Exception: "Student has already passed the course"
 INSERT INTO Registrations(Student, courses) VALUES (999, 'TDA416'); -- 999 should be registred at course tda416
