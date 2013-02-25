@@ -128,8 +128,26 @@ public class StudentPortal
 		// Your implementation here
 	}
 
-	static void unregisterStudent(Connection conn, String student, String course)
+	static void unregisterStudent(Connection conn, String student, String course) throws SQLException
+	
 	{
-		// Your implementation here
+		Statement isRegStmt = conn.createStatement();
+		ResultSet rs1 = isRegStmt.executeQuery("SELECT COUNT(*) FROM Registred " +
+				"WHERE Registred.student = '" + student + "'" + 
+				" AND Registred.course = '" + course + "'");
+		rs1.next();
+		if (rs1.getInt(1) != 0) {
+		Statement unregStmt = conn.createStatement();
+		ResultSet r2 = unregStmt.executeQuery("DELETE FROM Registrations " +
+				"WHERE Registrations.student = '" + student + "'" + 
+				" AND Registrations.courses = '" + course + "'");
+		
+		System.out.println("Student: " + student + " is now unregistred" +
+				" from course: " + course);
+		}
+		else {
+			System.out.println("Student: " + student + " wasn«t registred at" +
+					" this course and he is not registred now either at " + course);
+		}
 	}
 }
