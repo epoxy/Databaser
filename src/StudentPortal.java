@@ -69,6 +69,7 @@ public class StudentPortal
 	static void getInformation(Connection conn, String student) throws SQLException
 	{
 		//Name and program
+		//TODO Studentfollowing
 		Statement namePrgrmStmt = conn.createStatement();
 		ResultSet rs = namePrgrmStmt.executeQuery("SELECT name, program FROM STUDENTS WHERE id= '" + student + "'");
 		rs.next();
@@ -85,15 +86,23 @@ public class StudentPortal
 		ResultSet rs3 = readStmt.executeQuery("SELECT name, completedCourse, Courses.credit, grade " +
 											"FROM Courses, FinishedCourses " +
 											"WHERE code=completedCourse AND studentID = '" + student + "'");
+		System.out.println("Read courses (name (code), credits: grade):");
 		while(rs3.next()){
-			System.out.println("Read courses (name (code), credits: grade):\n" + rs3.getString(1) + " (" + 
+			System.out.println("   " + rs3.getString(1) + " (" + 
 								rs3.getString(2) + "), " + rs3.getInt(3) + "p: " + rs3.getInt(4));
 		}
 		
 		//Registered Courses
 		Statement regStmt = conn.createStatement();
-		ResultSet rs4 = regStmt.executeQuery("");
-		
+		ResultSet rs4 = regStmt.executeQuery("SELECT Courses.name, Courses.code, Courses.credit, status " +
+											"FROM Registrations, Courses " +
+											"WHERE Courses.code=Registrations.courses AND " +
+												"Registrations.student = '" + student + "'");
+		System.out.println("Registered courses (name (code), credits: status):");
+		while(rs4.next()){
+			System.out.println("   " + rs4.getString(1) + " (" + rs4.getString(2) + "), " + 
+								rs4.getInt(3) + "p: " + rs4.getString(4));
+		}
 	}
 
 	static void registerStudent(Connection conn, String student, String course)
