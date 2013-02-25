@@ -114,7 +114,7 @@ public class StudentPortal
 		System.out.println("Research credits taken: " + rs5.getInt(3));
 		System.out.println("Total credits taken: " + rs5.getInt(4));
 		System.out.print("Fulfills the requirements for graduation: ");
-		if(rs5.getString(5)=="TRUE"){
+		if(rs5.getString(5).equals("TRUE")){
 			System.out.println("yes");
 		}
 		else{
@@ -141,9 +141,19 @@ public class StudentPortal
 			if(e.getErrorCode()==20001){ //Already registerd or waiting
 				System.out.println("error 2001");
 				Statement alreadyRegStmt = conn.createStatement();
-				ResultSet rs3 = alreadyRegStmt.executeQuery("SELECT ");
+				ResultSet rs3 = alreadyRegStmt.executeQuery("SELECT status " +
+															"FROM Registrations " + 
+															"WHERE Registrations.student = '" + student + "' " + 
+															"AND Registrations.courses = '" + course + "'");
+				rs3.next();
+				System.out.println(rs3.getString(1));
+				if(rs3.getString(1).equals("registered")){
+					System.out.println("You are already registered for the course " + course);
+				}
+				else{
+					System.out.println("You are already in the waitinglist for the course " + course);
+				}
 			}
-			//System.err.println(e);
 		}
 	}
 
