@@ -88,7 +88,7 @@ public class StudentPortal
 		System.out.println("\nRead courses (name (code), credits: grade):");
 		while(rs3.next()){
 			System.out.println("   " + rs3.getString(1) + " (" + 
-					rs3.getString(2) + "), " + rs3.getInt(3) + "p: " + rs3.getInt(4));
+					rs3.getString(2) + "), " + rs3.getString(3) + "p: " + rs3.getString(4));
 		}
 
 		//Registered Courses
@@ -100,7 +100,7 @@ public class StudentPortal
 		System.out.println("\nRegistered courses (name (code), credits: status):");
 		while(rs4.next()){
 			System.out.println("   " + rs4.getString(1) + " (" + rs4.getString(2) + "), " + 
-					rs4.getInt(3) + "p: " + rs4.getString(4));
+					rs4.getString(3) + "p: " + rs4.getString(4));
 
 		}
 		//Seminar courses taken
@@ -143,7 +143,7 @@ public class StudentPortal
 				Statement alreadyRegStmt = conn.createStatement();
 				ResultSet rs3 = alreadyRegStmt.executeQuery("SELECT status " +
 															"FROM Registrations " + 
-															"WHERE Registrations.student = '" + student + "' " + 
+															"WHERE Registrations.student = " + student + " " + 
 															"AND Registrations.courses = '" + course + "'");
 				rs3.next();
 				System.out.println(rs3.getString(1));
