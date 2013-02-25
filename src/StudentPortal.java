@@ -128,8 +128,10 @@ public class StudentPortal
 		//Try to register
 		try{
 			Statement registerStmt = conn.createStatement();
+			System.out.println("111111");
 			ResultSet rs1 = registerStmt.executeQuery("INSERT INTO Registrations(student, courses) " + 
-					"VALUES ('" + student + "', '" + course + "')");
+					"VALUES (" + student + ", '" + course + "')");
+			System.out.println("222222");
 			Statement successStmt = conn.createStatement();
 			ResultSet rs2 = successStmt.executeQuery("SELECT name " + 
 													"FROM Courses " + 
@@ -138,6 +140,8 @@ public class StudentPortal
 			System.out.println("You are successfully registered to course " + course + " " + rs2.getString(1));
 		}
 		catch(SQLException e){
+			System.out.println("333");
+			System.out.println("bal" + e.getErrorCode());
 			if(e.getErrorCode()==20001){ //Already registerd or waiting
 				System.out.println("error 2001");
 				Statement alreadyRegStmt = conn.createStatement();

@@ -17,6 +17,7 @@ DECLARE
 	IsaLimitedCourse INT;
 	nbrOfRegistredInCourse INT;
 	NbrOfPlacesInCourse INT;
+	alreadyWaiting INT;
 	
 	
 BEGIN
@@ -44,6 +45,13 @@ BEGIN
 	WHERE R.Courses = :new.Courses
 	AND R.Status = 'registered'
 	AND R.Student = :new.student;
+
+	SELECT COUNT (*)
+	INTO alreadyWaiting
+	FROM Registrations R
+	WHERE R.Courses = :old.Courses
+	AND R.Status = 'waiting'
+	AND R.Student = :old.student;
 	
 	SELECT Count(*)
 	INTO IsaLimitedCourse
@@ -60,7 +68,7 @@ BEGIN
 	
 	IF requiredCourse = passedRequiredCourse THEN
 		IF passedCurrentCourse = 0 THEN
-			IF alreadyRegistred = 0 THEN
+			IF alreadyRegistred = 0 OR alreadyWaiting = 0 THEN
 				IF IsaLimitedCourse != 0 THEN
 					SELECT L.availablePlaces
 					INTO NbrOfPlacesInCourse
