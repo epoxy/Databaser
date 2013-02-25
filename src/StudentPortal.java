@@ -142,6 +142,7 @@ public class StudentPortal
 		catch(SQLException e){
 			System.out.println("333");
 			System.out.println("bal" + e.getErrorCode());
+			System.out.println("bal" + e.getLocalizedMessage());
 			if(e.getErrorCode()==20001){ //Already registerd or waiting
 				System.out.println("error 2001");
 				Statement alreadyRegStmt = conn.createStatement();
@@ -166,17 +167,17 @@ public class StudentPortal
 	{
 		Statement isRegStmt = conn.createStatement();
 		ResultSet rs1 = isRegStmt.executeQuery("SELECT COUNT(*) FROM Registrations " +
-				"WHERE Registrations.student = '" + student + "'" + 
+				"WHERE Registrations.student = " + student + 
 				" AND Registrations.courses = '" + course + "'");
 		rs1.next();
 		if (rs1.getInt(1) != 0) {
 		Statement unregStmt = conn.createStatement();
 		ResultSet r2 = unregStmt.executeQuery("DELETE FROM Registrations " +
-				"WHERE Registrations.student = '" + student + "'" + 
+				"WHERE Registrations.student = " + student + 
 				" AND Registrations.courses = '" + course + "'");
 		
-		System.out.println("Student: " + r2.getString(1) + " is now unregistred" +
-				" from course: " + r2.getString(2));
+		System.out.println("Student: " + student + " is now unregistred" +
+				" from course: " + course);
 		}
 		else {
 			System.out.println("Student: " + student + " wasn«t registred at" +
