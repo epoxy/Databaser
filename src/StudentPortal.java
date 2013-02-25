@@ -102,10 +102,25 @@ public class StudentPortal
 			System.out.println("   " + rs4.getString(1) + " (" + rs4.getString(2) + "), " + 
 					rs4.getInt(3) + "p: " + rs4.getString(4));
 
-		//Seminar courses taken
-		
-			
 		}
+		//Seminar courses taken
+		Statement pathStmt = conn.createStatement();
+		ResultSet rs5 = pathStmt.executeQuery("SELECT nbrOfSeminarCourses, nbrOfMathCredits, nbrOfResearchCredits, totalCredit, isGraduated " + 
+											"FROM PathToGraduation " +
+											"WHERE PathToGraduation.studentID = '" + student + "'");
+		rs5.next();
+		System.out.println("\nSeminar courses taken: " + rs5.getInt(1));
+		System.out.println("Math credits taken: " + rs5.getInt(2));
+		System.out.println("Research credits taken: " + rs5.getInt(3));
+		System.out.println("Total credits taken: " + rs5.getInt(4));
+		System.out.print("Fulfills the requirements for graduation: ");
+		if(rs5.getString(5)=="TRUE"){
+			System.out.println("yes");
+		}
+		else{
+			System.out.println("no");
+		}
+		System.out.println("-----------------------------\n");
 	}
 
 	static void registerStudent(Connection conn, String student, String course)
