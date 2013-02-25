@@ -106,8 +106,8 @@ public class StudentPortal
 		//Seminar courses taken
 		Statement pathStmt = conn.createStatement();
 		ResultSet rs5 = pathStmt.executeQuery("SELECT nbrOfSeminarCourses, nbrOfMathCredits, nbrOfResearchCredits, totalCredit, isGraduated " + 
-											"FROM PathToGraduation " +
-											"WHERE PathToGraduation.studentID = '" + student + "'");
+				"FROM PathToGraduation " +
+				"WHERE PathToGraduation.studentID = '" + student + "'");
 		rs5.next();
 		System.out.println("\nSeminar courses taken: " + rs5.getInt(1));
 		System.out.println("Math credits taken: " + rs5.getInt(2));
@@ -123,9 +123,28 @@ public class StudentPortal
 		System.out.println("-----------------------------\n");
 	}
 
-	static void registerStudent(Connection conn, String student, String course)
+	static void registerStudent(Connection conn, String student, String course) throws SQLException
 	{
-		// Your implementation here
+		//Try to register
+		try{
+			Statement registerStmt = conn.createStatement();
+			ResultSet rs1 = registerStmt.executeQuery("INSERT INTO Registrations(student, courses) " + 
+					"VALUES ('" + student + "', '" + course + "')");
+			Statement successStmt = conn.createStatement();
+			ResultSet rs2 = successStmt.executeQuery("SELECT name " + 
+													"FROM Courses " + 
+													"WHERE code = '" + course + "'");
+			rs2.next();
+			System.out.println("You are successfully registered to course " + course + " " + rs2.getString(1));
+		}
+		catch(SQLException e){
+			if(e.getErrorCode()==20001){ //Already registerd or waiting
+				System.out.println("error 2001");
+				Statement alreadyRegStmt = conn.createStatement();
+				ResultSet rs3 = alreadyRegStmt.executeQuery("SELECT ");
+			}
+			//System.err.println(e);
+		}
 	}
 
 	static void unregisterStudent(Connection conn, String student, String course) throws SQLException
