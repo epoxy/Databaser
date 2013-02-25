@@ -48,7 +48,7 @@ public class StudentPortal
 						break;
 					} else {
 						System.out.println("Unknown argument, please choose either " +
-									 "information, register, unregister or quit!");
+								"information, register, unregister or quit!");
 						continue;
 					}
 				}
@@ -68,40 +68,43 @@ public class StudentPortal
 
 	static void getInformation(Connection conn, String student) throws SQLException
 	{
-		//Name and program
-		//TODO Studentfollowing
-		Statement namePrgrmStmt = conn.createStatement();
-		ResultSet rs = namePrgrmStmt.executeQuery("SELECT name, program FROM STUDENTS WHERE id= '" + student + "'");
+		System.out.println("Information for student " + student +
+				"\n-----------------------------");
+		//Name, program and branch
+		Statement infoStmt = conn.createStatement();
+		ResultSet rs = infoStmt.executeQuery("SELECT studentName, program, branch " + 
+				"FROM StudentFollowing " + 
+				"WHERE studentId= '" + student + "'");
 		rs.next();
 		System.out.println("Name: " + rs.getString(1));
 		System.out.println("Line: " + rs.getString(2));
-		//Branch
-		Statement branchStmt = conn.createStatement();
-		ResultSet rs2 = branchStmt.executeQuery("SELECT branch FROM ORIENTATIONS WHERE student= '" + student + "'");
-		rs2.next();
-		System.out.println("Branch: " + rs2.getString(1));
-		
+		System.out.println("Branch: " + rs.getString(3));
+
 		//Read Courses
 		Statement readStmt = conn.createStatement();
 		ResultSet rs3 = readStmt.executeQuery("SELECT name, completedCourse, Courses.credit, grade " +
-											"FROM Courses, FinishedCourses " +
-											"WHERE code=completedCourse AND studentID = '" + student + "'");
-		System.out.println("Read courses (name (code), credits: grade):");
+				"FROM Courses, FinishedCourses " +
+				"WHERE code=completedCourse AND studentID = '" + student + "'");
+		System.out.println("\nRead courses (name (code), credits: grade):");
 		while(rs3.next()){
 			System.out.println("   " + rs3.getString(1) + " (" + 
-								rs3.getString(2) + "), " + rs3.getInt(3) + "p: " + rs3.getInt(4));
+					rs3.getString(2) + "), " + rs3.getInt(3) + "p: " + rs3.getInt(4));
 		}
-		
+
 		//Registered Courses
 		Statement regStmt = conn.createStatement();
 		ResultSet rs4 = regStmt.executeQuery("SELECT Courses.name, Courses.code, Courses.credit, status " +
-											"FROM Registrations, Courses " +
-											"WHERE Courses.code=Registrations.courses AND " +
-												"Registrations.student = '" + student + "'");
-		System.out.println("Registered courses (name (code), credits: status):");
+				"FROM Registrations, Courses " +
+				"WHERE Courses.code=Registrations.courses AND " +
+				"Registrations.student = '" + student + "'");
+		System.out.println("\nRegistered courses (name (code), credits: status):");
 		while(rs4.next()){
 			System.out.println("   " + rs4.getString(1) + " (" + rs4.getString(2) + "), " + 
-								rs4.getInt(3) + "p: " + rs4.getString(4));
+					rs4.getInt(3) + "p: " + rs4.getString(4));
+
+		//Seminar courses taken
+		
+			
 		}
 	}
 
