@@ -128,10 +128,8 @@ public class StudentPortal
 		//Try to register
 		try{
 			Statement registerStmt = conn.createStatement();
-			System.out.println("111111");
 			ResultSet rs1 = registerStmt.executeQuery("INSERT INTO Registrations(student, courses) " + 
 					"VALUES (" + student + ", '" + course + "')");
-			System.out.println("222222");
 			Statement successStmt = conn.createStatement();
 			ResultSet rs2 = successStmt.executeQuery("SELECT name " + 
 													"FROM Courses " + 
@@ -140,11 +138,8 @@ public class StudentPortal
 			System.out.println("You are successfully registered to course " + course + " " + rs2.getString(1));
 		}
 		catch(SQLException e){
-			System.out.println("333");
-			System.out.println("bal" + e.getErrorCode());
-			System.out.println("bal" + e.getLocalizedMessage());
 			if(e.getErrorCode()==20001){ //Already registerd or waiting
-				System.out.println("error 2001");
+				System.out.println("error 20001");
 				Statement alreadyRegStmt = conn.createStatement();
 				ResultSet rs3 = alreadyRegStmt.executeQuery("SELECT status " +
 															"FROM Registrations " + 
@@ -158,6 +153,19 @@ public class StudentPortal
 				else{
 					System.out.println("You are already in the waitinglist for the course " + course);
 				}
+			}
+			else if(e.getErrorCode()==20002){ //Already passed the course
+				System.out.println("error 20002");
+				System.out.println("You have already passed the course " + course);
+			}
+			else if(e.getErrorCode()==20003){ //Has not passed required courses
+				System.out.println("error 20003");
+				System.out.println("You have not passed the required courses for this course.");
+			}
+			else{
+				System.out.println("Registration could NOT be done. Check information if the " +
+						"course is already registered or waiting for.");
+				System.out.println("Error code: " + e.getErrorCode());
 			}
 		}
 	}
