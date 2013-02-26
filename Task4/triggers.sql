@@ -68,7 +68,7 @@ BEGIN
 	
 	IF requiredCourse = passedRequiredCourse THEN
 		IF passedCurrentCourse = 0 THEN
-			IF alreadyRegistred = 0 OR alreadyWaiting = 0 THEN
+			IF alreadyRegistred = 0 AND alreadyWaiting = 0 THEN
 				IF IsaLimitedCourse != 0 THEN
 					SELECT L.availablePlaces
 					INTO NbrOfPlacesInCourse
@@ -118,7 +118,7 @@ SELECT COUNT (*)
 	AND R.Status = 'registered'
 	AND R.Student = :old.student;
 
-SELECT COUNT (*)
+	SELECT COUNT (*)
 	INTO alreadyWaiting
 	FROM Registrations R
 	WHERE R.Courses = :old.Courses
@@ -138,7 +138,7 @@ SELECT COUNT (*)
 	
 	SELECT COUNT (*)
 	INTO nbrOfStudentWaiting
-	FROM CourseQueuePositions Q
+	FROM CourseQueuePositions q
 	WHERE q.Course = :old.courses;
 	
 	IF alreadyWaiting != 0 THEN	--sista satsen vi gör!
@@ -158,6 +158,11 @@ SELECT COUNT (*)
 			INTO NbrOfPlacesInCourse
 			FROM LimitedParticipantsCourse L
 			WHERE L.course = :old.Courses;
+			SELECT COUNT(*)
+			INTO nbrOfRegistredInCourse
+			FROM Registrations R
+			WHERE R.Courses = :old.courses
+			AND R.Status = 'registered';
 			IF nbrOfRegistredInCourse < NbrOfPlacesInCourse THEN
 				SELECT  q.student
 				INTO registerStudent

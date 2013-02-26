@@ -174,15 +174,19 @@ public class StudentPortal
 	
 	{
 		Statement isRegStmt = conn.createStatement();
-		ResultSet rs1 = isRegStmt.executeQuery("SELECT COUNT(*) FROM Registrations " +
-				"WHERE Registrations.student = " + student + 
-				" AND Registrations.courses = '" + course + "'");
+		ResultSet rs1 = isRegStmt.executeQuery("SELECT COUNT(*) " +
+												"FROM Registrations " +
+												"WHERE Registrations.student = " + student + 
+												" AND Registrations.courses = '" + course + "'");
 		rs1.next();
-		if (rs1.getInt(1) != 0) {
+		System.out.println(rs1.getString(1));
+		if (!(rs1.getString(1).equals("0"))) {//If registered or waiting for the course
 		Statement unregStmt = conn.createStatement();
-		ResultSet r2 = unregStmt.executeQuery("DELETE FROM Registrations " +
-				"WHERE Registrations.student = " + student + 
-				" AND Registrations.courses = '" + course + "'");
+		System.out.println("lol");
+		ResultSet r2 = unregStmt.executeQuery("DELETE " +
+											"FROM Registrations " +
+											"WHERE Registrations.student = " + student + 
+											" AND Registrations.courses = '" + course + "'");
 		
 		System.out.println("Student: " + student + " is now unregistred" +
 				" from course: " + course);
