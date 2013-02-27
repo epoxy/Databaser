@@ -13,6 +13,24 @@ public class StudentPortal
 	 *	2)	Implement the three functions getInformation, registerStudent
 	 *		and unregisterStudent.
 	 */
+	
+	/*
+	 * Test cases:
+	 * 1. Student: 111
+	 * 2. Student: 123
+	 * 3. Student: 123 Register: TDA357
+	 * 4. Student: 123 Register: TDA357
+	 * 5. Student: 123 Unregister: TDA357
+	 * 6. Student: 123 Unregister: TDA357
+	 * 7. Student: 222 Register: ELA222
+	 * 8. Student: 222 Unregister: TDA999 -> Student 777 should be registered
+	 * 9. Student: 222 Register: TDA999
+	 * 10. Student: 222 Unregister
+	 * 11. Student: 222 Unregister
+	 * 12. TDA416 is overful
+	 * 		Student: 777 Register: TDA416 -> is placed in queue
+	 * 		Student: 555 Unregister: TDA416
+	 */
 	public static void main(String[] args)
 	{
 		if (args.length == 1) {
@@ -135,7 +153,24 @@ public class StudentPortal
 													"FROM Courses " + 
 													"WHERE code = '" + course + "'");
 			rs2.next();
-			System.out.println("You are successfully registered to course " + course + " " + rs2.getString(1));
+			Statement regOrWaitStmt = conn.createStatement();
+			ResultSet rs10 = regOrWaitStmt.executeQuery("SELECT status " +
+														"FROM Registrations " +
+														"WHERE Registrations.student = " + student + " " +
+														"AND Registrations.courses = '" + course +"'");
+			rs10.next();
+			System.out.print("You are successfully " + rs10.getString(1) + " for course " + course + " " + rs2.getString(1));
+			if(rs10.getString(1).equals("waiting")){
+				Statement queueNrStmt = conn.createStatement();
+				ResultSet rs11 = queueNrStmt.executeQuery("SELECT queuenumber " +
+															"FROM Coursequeuepositions " +
+															"WHERE Coursequeuepositions.student = " + student + " " +
+															"AND Coursequeuepositions.course = '" + course +"'");
+				rs11.next();
+				System.out.print(", with queuenumber: " + rs11.getString(1));
+			}
+			System.out.println("\n");
+		
 		}
 		catch(SQLException e){
 			if(e.getErrorCode()==20001){ //Already registerd or waiting
@@ -179,10 +214,8 @@ public class StudentPortal
 												"WHERE Registrations.student = " + student + 
 												" AND Registrations.courses = '" + course + "'");
 		rs1.next();
-		System.out.println(rs1.getString(1));
 		if (!(rs1.getString(1).equals("0"))) {//If registered or waiting for the course
 		Statement unregStmt = conn.createStatement();
-		System.out.println("lol");
 		ResultSet r2 = unregStmt.executeQuery("DELETE " +
 											"FROM Registrations " +
 											"WHERE Registrations.student = " + student + 
@@ -192,7 +225,7 @@ public class StudentPortal
 				" from course: " + course);
 		}
 		else {
-			System.out.println("Student: " + student + " wasn«t registred at" +
+			System.out.println("Student: " + student + " was not registred at" +
 					" this course and he is not registred now either at " + course);
 		}
 	}
